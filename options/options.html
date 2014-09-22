@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GitHub Notifier Options</title>
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="options.js"></script>
+  <link rel="stylesheet" type="text/css" href="options.css">
+</head>
+
+<body>
+<div id="container">
+  <h1>GitHub Notifier</h1>
+
+  <p>To check how many unread notifications you have, this Chrome extension requires a GitHub personal access token.</p>
+
+  <p>To generate a new GitHub access token:</p>
+
+  <ol>
+    <li>Go to <a href="https://github.com/settings/tokens/new" target="_new">this page</a>.</li>
+    <li>
+      Make sure to check the checkbox for the <code>notifications</code> scope.
+      <span>You don't need to give this extension access to anything else.</span>
+    </li>
+    <li>Enter a description and generate your token.</li>
+  </ol>
+
+  <p>Then copy the token from GitHub and enter it below:</p>
+
+  <form>
+    <input type="text" id="token" name="token" placeholder="Paste your token here" />
+    <input type="submit" value="Save" />
+    <div class="success">Your token has been saved!</div>
+    <div class="error">Please provide a token.</div>
+  </form>
+</div>
+</body>
+</html>
