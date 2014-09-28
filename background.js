@@ -31,6 +31,9 @@ chrome.browserAction.onClicked.addListener(function() {
 (function() {
   var next = arguments.callee;
 
+  // If there is no internet connection, try again in 10 seconds
+  if (!window.navigator.onLine) return setTimeout(next, 10000);
+
   if (localStorage['github_token']) {
     // If user has provided their token, get unread notifications.
     github.notifications(function(unread, timeToWait) {
@@ -40,10 +43,11 @@ chrome.browserAction.onClicked.addListener(function() {
       // Wait the amount of time requested by GitHub before polling again.
       // TODO: also respect the rate limiting feedback provided by GitHub
       setTimeout(next, timeToWait);
-    }, function() {
-      // Indicate something went wrong while querying the GitHub API.
+    }, function(error) {
+      // Badge the icon with an error state and try again in 1 minute.
       // TODO: show some error messaging (in the tooltip or the options page)
       badge.error();
+      setTimeout(next, 60000);
     });
   } else {
     // The user has not yet provided their token, so switch the badge to an

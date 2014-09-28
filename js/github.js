@@ -2,7 +2,7 @@ github = {
   urlRoot: "https://api.github.com",
 
   notifications: function(success, error) {
-    this.get('/notifications', function(notifications, xhr) {
+    this.get("/notifications", function(notifications, xhr) {
       success(notifications, github.timeToWait(xhr));
     }, error);
   },
@@ -16,14 +16,14 @@ github = {
     $.ajax({
       type: "GET",
       url: this.urlRoot + path,
-      data: { access_token: localStorage['github_token'] },
+      data: { access_token: localStorage["github_token"] },
 
       success: function(data, status, xhr) {
         success(data, xhr);
       },
 
-      error: function(xhr, status, error) {
-        error(error);
+      error: function(xhr, status, errMsg) {
+        error(errMsg);
       }
     });
   }
