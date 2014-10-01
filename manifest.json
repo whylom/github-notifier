@@ -26,7 +26,7 @@
     "scripts": [
       "js/jquery.js",
       "js/github.js",
-      "js/badge.js",
+      "js/icon.js",
       "background.js"
     ]
   },
