@@ -1,29 +1,34 @@
-badge = {
-  text: function(text) {
+icon = {
+  badge: function(text, color) {
     chrome.browserAction.setBadgeText({ text: text.toString() });
-  },
-
-  background: function(color) {
     chrome.browserAction.setBadgeBackgroundColor({ color: color });
   },
 
-  reset: function() {
-    this.text("");
-    this.background("#333");
+  enable: function() {
+    chrome.browserAction.setIcon({ path: "icons/19.png" });
   },
 
-  set: function(text) {
-    if (text.toString() === "0") {
+  disable: function() {
+    chrome.browserAction.setIcon({ path: "icons/19-gray.png" });
+  },
+
+  reset: function() {
+    this.disable();
+    this.badge("", "#333");
+  },
+
+  notify: function(number) {
+    if (number.toString() === "0") {
       // instead of showing "0" in badge, show nothing
       this.reset();
     } else {
-      this.text(text);
-      this.background("#333");
+      this.enable();
+      this.badge(number, "#333");
     }
   },
 
   error: function() {
-    this.text("?");
-    this.background("#FF0000");
+    this.enable();
+    this.badge("?", "#FF0000");
   }
 };

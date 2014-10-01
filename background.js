@@ -31,6 +31,8 @@ chrome.browserAction.onClicked.addListener(function() {
 (function() {
   var next = arguments.callee;
 
+  icon.reset();
+
   // If there is no internet connection, try again in 10 seconds
   if (!window.navigator.onLine) return setTimeout(next, 10000);
 
@@ -38,7 +40,7 @@ chrome.browserAction.onClicked.addListener(function() {
     // If user has provided their token, get unread notifications.
     github.notifications(function(unread, timeToWait) {
       // Badge the icon with the # of unread notifications.
-      badge.set(unread.length);
+      icon.notify(unread.length);
 
       // Wait the amount of time requested by GitHub before polling again.
       // TODO: also respect the rate limiting feedback provided by GitHub
@@ -46,14 +48,14 @@ chrome.browserAction.onClicked.addListener(function() {
     }, function(error) {
       // Badge the icon with an error state and try again in 1 minute.
       // TODO: show some error messaging (in the tooltip or the options page)
-      badge.error();
+      icon.error();
       setTimeout(next, 60000);
     });
   } else {
     // The user has not yet provided their token, so switch the badge to an
     // error state to indicate the user should click to enter their token.
     // (Clicking will open the options page while in this state.)
-    badge.error();
+    icon.error();
 
     // Check every 2 seconds to see if the token has been entered yet.
     setTimeout(next, 2000);

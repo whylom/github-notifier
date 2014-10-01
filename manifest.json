@@ -17,7 +17,7 @@
   },
 
   "browser_action": {
-    "default_icon": "icons/19.png",
+    "default_icon": "icons/19-gray.png",
     "default_title": "GitHub Notifier"
   },
 
