@@ -4,14 +4,6 @@
     The main logic for this extension, which Chrome is kind enough to keep
     running in the background. It polls GitHub's notifications API, using the
     personal access token provided by the user in the options.
-
-    If the user has any unread notifications, the extension's icon is badged
-    with with the unread count. If any errors occur, the icon is badged with
-    a red "!"
-
-    Clicking on the extension's icon opens GitHub's notifications page in a
-    tab If the user has not yet provided their GitHub personal access token,
-    then clicking the icon opens the options page so they can enter it easily.
 */
 
 
