@@ -1,30 +1,40 @@
 github = {
-  urlRoot: "https://api.github.com",
+  notifications: function(callback) {
+    var self = this;
+    $.ajax({
+      type: "GET",
+      url: "https://api.github.com/notifications",
+      data: { access_token: localStorage["github_token"] },
 
-  notifications: function(success, error) {
-    this.get("/notifications", function(notifications, xhr) {
-      success(notifications, github.timeToWait(xhr));
-    }, error);
+      success: function(notifications, status, xhr) {
+        callback(notifications, self.timeToWait(xhr));
+      },
+
+      error: function(xhr, status, err) {
+        // Log the error for debugging and wait a minute before trying again.
+        console.log(err);
+        callback([], 60 * 1000);
+      }
+    });
   },
 
   timeToWait: function(xhr) {
-    var interval = xhr.getResponseHeader("X-Poll-Interval");
-    return parseInt(interval) * 1000;
-  },
+    // How many more requests we can make before GitHub rate limits this token.
+    // This is usually a nice high number like 5000.
+    var requestsRemaining = xhr.getResponseHeader("X-RateLimit-Remaining");
 
-  get: function(path, success, error) {
-    $.ajax({
-      type: "GET",
-      url: this.urlRoot + path,
-      data: { access_token: localStorage["github_token"] },
-
-      success: function(data, status, xhr) {
-        success(data, xhr);
-      },
-
-      error: function(xhr, status, errMsg) {
-        error(errMsg);
-      }
-    });
+    // But if we only have a handful left before we get rate limited...
+    if (parseInt(requestsRemaining) < 10) {
+      // ...wait until the rate limit resets before making another request.
+      // This is usually 1 hour.
+      var reset = new Date(xhr.getResponseHeader("X-RateLimit-Reset") * 1000);
+      var now = new Date();
+      return Math.ceil((reset - now) / 60);
+    } else {
+      // We don't have to worry about rate limiting, so wait for the interval
+      // suggested by GitHub before making another request. This is usually 60
+      // seconds, but might be more if they need to reduce load on their API.
+      return xhr.getResponseHeader("X-Poll-Interval") * 1000;
+    }
   }
 };
